@@ -6,11 +6,11 @@ import { NoTransactionsFound } from '@/components/NoTransactionsFound'
 import { ScreenWrapper } from '@/components/ScreenWrapper'
 import { TransactionItem } from '@/components/TransactionItem'
 import { Typo } from '@/components/Typo'
-import { COLORS } from '@/constants/colors'
+import { COLORS } from '@/constants/Colors'
 import { type TransactionResponse, useTransactionsDatabase } from '@/hooks/useTransactionsDatabase'
-import { useRouter } from 'expo-router'
+import { useFocusEffect, useRouter } from 'expo-router'
 import { Plus } from 'lucide-react-native'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { FlatList, Image, RefreshControl, StyleSheet, View } from 'react-native'
 
 export default function WalletScreen() {
@@ -23,24 +23,21 @@ export default function WalletScreen() {
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const [transactionToDelete, setTransactionToDelete] = useState<TransactionResponse | null>(null)
 
-  const loadData = useCallback(async () => {
+  const loadData = async () => {
     try {
-      const [transactionsData, summaryData] = await Promise.all([
-        listAll().catch(() => []),
-        getBalanceSummary().catch(() => ({ balance: 0, income: 0, expenses: 0 })),
-      ])
+      const transactionsData = await listAll()
+      const summaryData = await getBalanceSummary()
 
-      setTransactions(transactionsData || [])
+      setTransactions(transactionsData)
       setSummary(summaryData)
     } catch (error) {
       console.error('Error loading data:', error)
-      // Set default values on error
       setTransactions([])
       setSummary({ balance: 0, income: 0, expenses: 0 })
     } finally {
       setIsLoading(false)
     }
-  }, [listAll, getBalanceSummary])
+  }
 
   const onRefresh = async () => {
     setRefreshing(true)
@@ -48,12 +45,14 @@ export default function WalletScreen() {
     setRefreshing(false)
   }
 
-  useEffect(() => {
-    loadData()
-  }, [loadData])
+  useFocusEffect(
+    useCallback(() => {
+      loadData()
+    }, [loadData])
+  )
 
   const handleDelete = (id: string) => {
-    const transaction = transactions.find(t => t.id.toString() === id)
+    const transaction = transactions.find(t => t.id == id)
     if (transaction) {
       setTransactionToDelete(transaction)
       setShowDeleteModal(true)
@@ -65,7 +64,7 @@ export default function WalletScreen() {
 
     try {
       await remove(transactionToDelete.id)
-      await loadData() // Reload data after deletion
+      await loadData()
       setShowDeleteModal(false)
       setTransactionToDelete(null)
     } catch (error) {
@@ -109,8 +108,6 @@ export default function WalletScreen() {
         </View>
       </View>
 
-      {/* FlatList is a performant way to render long lists in React Native. */}
-      {/* it renders items lazily — only those on the screen. */}
       <FlatList
         style={styles.transactionsList}
         contentContainerStyle={styles.transactionsListContent}
@@ -178,6 +175,20 @@ const styles = StyleSheet.create({
     color: COLORS.white,
     fontWeight: '600',
     marginLeft: 4,
+  },
+  seedButton: {
+    backgroundColor: COLORS.income,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   sectionTitle: {
     fontSize: 18,

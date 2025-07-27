@@ -1,4 +1,4 @@
-import { COLORS } from '@/constants/colors'
+import { COLORS } from '@/constants/Colors'
 import { Modal, StyleSheet, View } from 'react-native'
 import { Button } from './Button'
 import { Typo } from './Typo'
@@ -33,9 +33,11 @@ export function ConfirmationModal({
           <Typo style={styles.message}>{message}</Typo>
 
           <View style={styles.buttonContainer}>
-            <Button style={styles.cancelButton} onPress={onClose}>
-              <Typo style={styles.cancelButtonText}>{cancelText}</Typo>
-            </Button>
+            {cancelText && (
+              <Button style={styles.cancelButton} onPress={onClose}>
+                <Typo style={styles.cancelButtonText}>{cancelText}</Typo>
+              </Button>
+            )}
 
             <Button style={styles.confirmButton} onPress={onConfirm} disabled={loading}>
               <Typo style={styles.confirmButtonText}>{confirmText}</Typo>
@@ -78,12 +80,12 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     flex: 1,
-    backgroundColor: COLORS.border,
+    backgroundColor: COLORS.textLight,
     paddingVertical: 12,
     borderRadius: 12,
   },
   cancelButtonText: {
-    color: COLORS.text,
+    color: COLORS.white,
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',

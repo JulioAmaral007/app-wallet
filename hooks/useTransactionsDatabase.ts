@@ -60,17 +60,13 @@ export function useTransactionsDatabase() {
     await database.runAsync('DELETE FROM transactions WHERE id = ?', [id])
   }
 
-  function summary() {
-    return database.getFirstAsync<Summary>(`
-        SELECT
-          COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS input,
-          COALESCE(SUM(CASE WHEN amount < 0 THEN ABS(amount) ELSE 0 END), 0) AS output
-        FROM transactions
-      `)
-  }
-
   async function getBalanceSummary(): Promise<BalanceSummary> {
-    const summaryData = await summary()
+    const summaryData = await database.getFirstAsync<Summary>(`
+      SELECT
+        COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) AS input,
+        COALESCE(SUM(CASE WHEN amount < 0 THEN ABS(amount) ELSE 0 END), 0) AS output
+      FROM transactions
+    `)
 
     if (!summaryData) {
       return {
@@ -87,5 +83,5 @@ export function useTransactionsDatabase() {
     }
   }
 
-  return { create, listByCategory, listAll, remove, summary, getBalanceSummary }
+  return { create, listByCategory, listAll, remove, getBalanceSummary }
 }
