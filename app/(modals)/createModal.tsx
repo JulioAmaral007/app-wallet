@@ -2,7 +2,7 @@ import { Button } from '@/components/Button'
 import { ConfirmationModal } from '@/components/ConfirmationModal'
 import { Loading } from '@/components/Loading'
 import { ModalWrapper } from '@/components/ModalWrapper'
-import { COLORS } from '@/constants/colors'
+import { COLORS } from '@/constants/Colors'
 import { useTransactionsDatabase } from '@/hooks/useTransactionsDatabase'
 import { useRouter } from 'expo-router'
 import {

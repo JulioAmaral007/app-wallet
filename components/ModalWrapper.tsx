@@ -1,4 +1,4 @@
-import { COLORS } from '@/constants/colors'
+import { COLORS } from '@/constants/Colors'
 import { Platform, StyleSheet, View, type ViewStyle } from 'react-native'
 
 export type ModalWrapperProps = {

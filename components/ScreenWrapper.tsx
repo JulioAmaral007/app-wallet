@@ -1,6 +1,6 @@
 import { Dimensions, Platform, View, type ViewStyle } from 'react-native'
 
-import { COLORS } from '@/constants/colors'
+import { COLORS } from '@/constants/Colors'
 
 const { height } = Dimensions.get('window')
 

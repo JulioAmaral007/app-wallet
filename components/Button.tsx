@@ -6,7 +6,7 @@ import {
   type ViewStyle,
 } from 'react-native'
 
-import { COLORS } from '@/constants/colors'
+import { COLORS } from '@/constants/Colors'
 import { Loading } from './Loading'
 
 export interface CustomButtonProps extends TouchableOpacityProps {

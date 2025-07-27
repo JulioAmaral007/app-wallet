@@ -1,7 +1,7 @@
+import { COLORS } from '@/constants/Colors'
 import { useRouter } from 'expo-router'
 import { Plus, Receipt } from 'lucide-react-native'
 import { StyleSheet, View } from 'react-native'
-import { COLORS } from '../constants/colors'
 import { Button } from './Button'
 import { Typo } from './Typo'
 

@@ -1,3 +1,4 @@
+import { COLORS } from '@/constants/Colors'
 import {
   Car,
   DollarSign,
@@ -11,7 +12,6 @@ import {
 } from 'lucide-react-native'
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { COLORS } from '../constants/colors'
 import { formatDate } from '../lib/utils'
 import { Button } from './Button'
 import { Typo } from './Typo'
