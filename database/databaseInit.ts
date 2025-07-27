@@ -1,4 +1,5 @@
 import type { SQLiteDatabase } from 'expo-sqlite'
+import { seedDatabase } from './seedData'
 
 export async function databaseInit(database: SQLiteDatabase) {
   await database.execAsync(`
@@ -10,4 +11,15 @@ export async function databaseInit(database: SQLiteDatabase) {
         created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
       );
     `)
+
+  // Verificar se já existem dados
+  const existingData = await database.getFirstAsync<{ count: number }>(
+    'SELECT COUNT(*) as count FROM transactions'
+  )
+
+  // Se não houver dados, inserir dados fictícios
+  if (existingData && existingData.count === 0) {
+    console.log('📊 Banco de dados vazio detectado. Inserindo dados fictícios...')
+    await seedDatabase(database)
+  }
 }
